@@ -1,0 +1,27 @@
+{
+    "name": "kenokokoro/v9-dal",
+    "description": "DAL structure for Laravel/Lumen",
+    "keywords": [
+        "framework",
+        "laravel",
+        "lumen",
+        "data access layer",
+        "dal"
+    ],
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "php": ">=7.1.3",
+        "illuminate/database": "5.*"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "V9\\DAL\\": "src/"
+    },
+    "autoload-dev": {
+        "V9\\Tests\\DAL\\": "tests/"
+    }
+}
