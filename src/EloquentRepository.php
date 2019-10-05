@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace V9\DAL;
 
@@ -18,6 +18,18 @@ class EloquentRepository implements RepositoryInterface
     public function __construct(BaseModelInterface $model)
     {
         $this->model = $model;
+    }
+
+    /**
+     * @param int   $uuid
+     * @param array $columns
+     * @param array $relations
+     * @return BaseModelInterface|Model
+     * @throws ModelNotFoundException
+     */
+    public function findById(int $uuid, array $columns = ['*'], array $relations = []): BaseModelInterface
+    {
+        return $this->newQuery()->select($columns)->with($relations)->findOrFail($uuid);
     }
 
     /**
@@ -62,9 +74,6 @@ class EloquentRepository implements RepositoryInterface
         $model->save();
     }
 
-    /**
-     * @return Builder
-     */
     public function newQuery(): Builder
     {
         return $this->model->newQuery();

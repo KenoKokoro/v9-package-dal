@@ -1,11 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace V9\DAL\Contracts;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 interface RepositoryInterface
 {
+    /**
+     * @param int   $id
+     * @param array $columns
+     * @param array $relations
+     * @return BaseModelInterface
+     * @throws ModelNotFoundException
+     */
+    public function findById(int $id, array $columns = ['*'], array $relations = []): BaseModelInterface;
+
     /**
      * @param string $uuid
      * @param array  $columns
@@ -36,4 +46,9 @@ interface RepositoryInterface
      * @return void
      */
     public function update(BaseModelInterface $model, array $attributes): void;
+
+    /**
+     * @return Builder
+     */
+    public function newQuery(): Builder;
 }

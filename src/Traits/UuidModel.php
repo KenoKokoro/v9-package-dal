@@ -1,32 +1,38 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace V9\DAL\Traits;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use V9\DAL\Contracts\BaseModelInterface;
 
 trait UuidModel
 {
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
-        static::creating(function(Model $model) {
-            $model->{$model->getKeyName()} = (string)Str::uuid();
-        });
+        static::creating(static::createdCallback());
     }
 
-    public function getIncrementing()
+    protected static function createdCallback(): callable
+    {
+        return function(BaseModelInterface $model) {
+            /** @var self $model */
+            $model->{$model->getKeyName()} = (string)Str::uuid();
+        };
+    }
+
+    public function getIncrementing(): bool
     {
         return false;
     }
 
-    public function getKeyType()
+    public function getKeyType(): string
     {
         return 'string';
     }
 
-    public function getKeyName()
+    public function getKeyName(): string
     {
         return 'uuid';
     }
