@@ -12,4 +12,7 @@ use V9\DAL\Traits\UuidModel;
 abstract class BaseModel extends Model implements BaseModelInterface
 {
     use UuidModel;
+
+    const DB_TRUE = true;
+    const DB_FALSE = false;
 }
