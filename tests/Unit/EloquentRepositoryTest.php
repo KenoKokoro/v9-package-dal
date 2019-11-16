@@ -3,6 +3,7 @@
 namespace V9\Tests\DAL\Unit;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mockery as m;
 use Mockery\MockInterface;
@@ -213,6 +214,40 @@ class EloquentRepositoryTest extends TestCase
             ->andReturn($this->builder);
 
         $this->fixture->findByCriteria(['column1' => 'value1'], ['uuid', 'name'], ['relation1', 'relation2']);
+    }
+    /** @test */
+    public function should_get_records_by_the_given_criteria_from_eloquent_repository(): void
+    {
+        $this->builder
+            ->shouldReceive('select')
+            ->once()
+            ->with(['uuid', 'name'])
+            ->andReturnSelf();
+        $this->builder
+            ->shouldReceive('with')
+            ->once()
+            ->with(['relation1', 'relation2'])
+            ->andReturnSelf();
+        $this->builder
+            ->shouldReceive('where')
+            ->once()
+            ->with(['column1' => 'value', 'column2' => 2])
+            ->andReturnSelf();
+        $this->builder
+            ->shouldReceive('get')
+            ->once()
+            ->andReturn(m::mock(Collection::class));
+        $this->model
+            ->shouldReceive('newQuery')
+            ->once()
+            ->andReturn($this->builder);
+
+        $actual = $this->fixture->getByCriteria(
+            ['column1' => 'value', 'column2' => 2],
+            ['uuid', 'name'],
+            ['relation1', 'relation2']
+        );
+        self::assertInstanceOf(Collection::class, $actual);
     }
 
     /** @test */

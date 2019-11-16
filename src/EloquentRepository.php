@@ -3,6 +3,7 @@
 namespace V9\DAL;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use V9\DAL\Contracts\BaseModelInterface;
@@ -57,6 +58,17 @@ class EloquentRepository implements RepositoryInterface
     }
 
     /**
+     * @param array $criteria
+     * @param array $columns
+     * @param array $relations
+     * @return Collection
+     */
+    public function getByCriteria(array $criteria, array $columns = ['*'], array $relations = []): Collection
+    {
+        return $this->newQuery()->select($columns)->with($relations)->where($criteria)->get();
+    }
+
+    /**
      * @param array $attributes
      * @return BaseModelInterface|Model
      */
@@ -65,6 +77,10 @@ class EloquentRepository implements RepositoryInterface
         return $this->newQuery()->create($attributes);
     }
 
+    /**
+     * @param BaseModelInterface $model
+     * @param array              $attributes
+     */
     public function update(BaseModelInterface $model, array $attributes): void
     {
         foreach ($attributes as $column => $value) {
@@ -74,6 +90,9 @@ class EloquentRepository implements RepositoryInterface
         $model->save();
     }
 
+    /**
+     * @return Builder
+     */
     public function newQuery(): Builder
     {
         return $this->model->newQuery();
