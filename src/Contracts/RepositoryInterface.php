@@ -3,6 +3,7 @@
 namespace V9\DAL\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 interface RepositoryInterface
@@ -33,6 +34,14 @@ interface RepositoryInterface
      * @throws ModelNotFoundException
      */
     public function findByCriteria(array $criteria, array $columns = ['*'], array $relations = []): BaseModelInterface;
+
+    /**
+     * @param array $criteria
+     * @param array $columns
+     * @param array $relations
+     * @return Collection
+     */
+    public function getByCriteria(array $criteria, array $columns = ['*'], array $relations = []): Collection;
 
     /**
      * @param array $attributes
