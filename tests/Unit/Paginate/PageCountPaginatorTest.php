@@ -3,6 +3,7 @@
 namespace V9\Tests\DAL\Unit\Paginate;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Mockery as m;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
@@ -33,6 +34,19 @@ class PageCountPaginatorTest extends TestCase
         parent::setUp();
         $this->paginator = m::mock(LengthAwarePaginator::class);
         $this->fixture = PageCountPaginator::fromLengthAwarePaginator($this->paginator);
+    }
+
+    /** @test */
+    public function page_count_paginator_should_return_items_collection(): void
+    {
+        $this->paginator
+            ->shouldReceive('getCollection')
+            ->once()
+            ->andReturn(m::mock(Collection::class));
+
+        $actual = $this->fixture->items();
+
+        self::assertInstanceOf(\Illuminate\Support\Collection::class, $actual);
     }
 
     /** @test */
